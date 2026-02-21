@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Area Paziente | Smart Hospital</title>
+    <link rel="stylesheet" href="/css/paziente_style.css" />
+</head>
+<body>
+
+    <div class="navbar">
+        <div>Smart Hospital - Portale Paziente</div>
+        <div>
+            Benvenuto, <span th:text="${token.username}">User</span>
+            <a href="/logout" class="btn-logout">Esci</a>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <div th:if="${error}" class="alert-error">
+            <p style="margin: 0;" th:text="${error}"></p>
+        </div>
+
+        <div class="card" th:if="${paziente}">
+            <h2>Cartella Clinica</h2>
+            
+            <div class="data-row">
+                <span class="label">Paziente:</span>
+                <span th:text="${paziente.nome_completo}">Nome Cognome</span>
+            </div>
+            <div class="data-row">
+                <span class="label">Età:</span>
+                <span th:text="${paziente.eta} + ' anni'">00 anni</span>
+            </div>
+            <div class="data-row">
+                <span class="label">Reparto Attuale:</span>
+                <strong class="text-green" th:text="${paziente.reparto}">Reparto</strong>
+            </div>
+            <div class="data-row">
+                <span class="label">Data Ricovero:</span>
+                <span th:text="${#temporals.format(paziente.data_arrivo, 'dd-MM-yyyy HH:mm')}">01-01-2026</span>
+            </div>
+        </div>
+
+        <div class="card" th:if="${esami}">
+            <h2>I tuoi Esami</h2>
+            
+            <p th:if="${esami.empty}" class="text-muted">
+                Nessun esame registrato al momento.
+            </p>
+
+            <table th:unless="${esami.empty}" class="table-esami">
+                <thead>
+                    <tr>
+                        <th>Esame</th>
+                        <th>Data</th>
+                        <th>Reparto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="esame : ${esami}">
+                        <td>
+                            <a th:href="@{/paziente/esame/{id}(id=${esame.id_esame})}"
+                               class="link-esame"
+                               th:text="${esame.nome_esame}">
+                               Link Esame
+                            </a>
+                        </td>
+                        
+                        <td th:text="${#temporals.format(esame.data_esame, 'dd-MM-yyyy')}">01/01/2026</td>
+                        
+                        <td th:text="${esame.reparto}">Reparto</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>La tua opinione conta</h2>
+            <form action="/paziente/update/soddisfazione" method="post" class="feedback-form">
+                
+                <div class="slider-container">
+                    <label for="livello" class="slider-label">
+                        Quanto sei soddisfatto del servizio? (0-100)
+                    </label>
+                    
+                    <input type="range" id="soddisfazione" name="soddisfazione" min="0" max="100" 
+                           th:value="${paziente.soddisfazione}" 
+                           oninput="this.nextElementSibling.value = this.value"
+                           class="slider-input" />
+                    
+                    <output th:text="${paziente.soddisfazione}" class="slider-value">50</output>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    Aggiorna
+                </button>
+            </form>
+        </div>
+        
+    </div>
+</body>
+</html>

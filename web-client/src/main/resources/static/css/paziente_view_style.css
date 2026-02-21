@@ -1,0 +1,177 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #eef2f5;
+    padding: 20px;
+    margin: 0;
+}
+
+.btn-back {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #0056b3;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.btn-back:hover {
+    color: #003d82;
+    text-decoration: underline;
+}
+
+.btn-primary, .btn-danger, .btn-success {
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background 0.3s;
+}
+
+.btn-primary { background-color: #007bff; }
+.btn-primary:hover { background-color: #0056b3; }
+
+.btn-danger { background-color: #dc3545; }
+.btn-danger:hover { background-color: #a71d2a; }
+
+.btn-success { background-color: #28a745; }
+.btn-success:hover { background-color: #1e7e34; }
+
+/* --- Card e Header --- */
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.patient-title {
+    margin: 0;
+    color: #2c3e50;
+}
+
+.header-right {
+    text-align: right;
+}
+
+.form-dimissione {
+    margin-top: 10px;
+}
+
+/* --- Griglia Dati --- */
+.data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.label {
+    color: #888;
+    font-size: 0.9em;
+}
+
+.value {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #333;
+}
+
+.divider {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 20px 0;
+}
+
+/* --- Area Medico (Prescrizione) --- */
+.doctor-box {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #bbdefb;
+    margin-bottom: 20px;
+}
+
+.doctor-title {
+    color: #0d47a1;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.prescrizione-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.input-std {
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* --- Tabella Esami --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+    vertical-align: middle;
+}
+
+th {
+    background-color: #f8f9fa;
+    color: #555;
+}
+
+.col-esame { width: 30%; }
+.col-data { width: 20%; }
+.text-bold { font-weight: bold; }
+
+.empty-message {
+    color: gray;
+    font-style: italic;
+}
+
+/* --- Stati Esito --- */
+.esito-ok {
+    color: green;
+    font-weight: bold;
+}
+
+.esito-pending {
+    color: orange;
+    background: #fff3cd;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* --- Form Modifica Esito --- */
+.form-update-esito {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.input-full {
+    width: 100%;
+}

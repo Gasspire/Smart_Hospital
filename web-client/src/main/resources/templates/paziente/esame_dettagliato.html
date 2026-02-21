@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dettaglio Esame | Smart Hospital</title>
+    <link rel="stylesheet" href="/css/esame_style.css" />
+</head>
+<body>
+
+    <div class="card" th:if="${esame}">
+        <div class="header">
+            <h1 th:text="${esame.nome_esame}">Nome Esame</h1>
+            
+            <div>
+                <span class="date-label">Eseguito il: </span>
+                <span th:text="${#temporals.format(esame.data_esame, 'dd MMMM yyyy')}" style="font-weight: 500;">Data</span>
+            </div>
+        </div>
+
+        <div>
+            <span class="label">Reparto:</span>
+            <span class="value" th:text="${esame.reparto}">Reparto</span>
+        </div>
+
+        <div class="label">Esito:</div>
+        
+        <div class="esito-box" th:if="${esame.esito != null}">
+            <p th:text="${esame.esito}" class="esito-text"></p>
+        </div>
+
+        <div th:if="${esame.esito == null}" class="alert-pending">
+             Referto non ancora disponibile.
+        </div>
+
+        <a href="/paziente/home" class="btn-back">⬅ Torna alla Dashboard</a>
+    </div>
+
+</body>
+</html>

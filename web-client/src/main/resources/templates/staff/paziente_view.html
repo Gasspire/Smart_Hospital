@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cartella Paziente | Staff</title>
+    <link rel="stylesheet" href="/css/paziente_view_style.css" />
+</head>
+<body>
+
+    <a href="/staff/home" class="btn-back">⬅ Torna alla Lista Pazienti</a>
+
+    <div class="card" th:if="${paziente}">
+        
+        <div class="header">
+            <div>
+                <h1 class="patient-title" th:text="${paziente.nome_completo}">Nome Paziente</h1>
+                
+                <form th:if="${isDoctor}" action="/staff/paziente/dimetti" method="post" 
+                      class="form-dimissione" onsubmit="return confirm('Sei sicuro di voler dimettere questo paziente?');">
+                    <input type="hidden" name="idPaziente" th:value="${paziente.paziente_id}">
+                    <button type="submit" class="btn-danger">Dimetti Paziente</button>
+                </form>
+            </div>
+
+            <div class="header-right">
+                <div class="label">ID Paziente</div>
+                <div class="value" th:text="${paziente.paziente_id}">ID</div>
+            </div>
+        </div>
+
+        <div class="data-grid">
+            <div><span class="label">Età:</span> <br> <span class="value" th:text="${paziente.eta} + ' anni'">00</span></div>
+            <div><span class="label">Reparto:</span> <br> <span class="value" th:text="${paziente.reparto}">Reparto</span></div>
+            <div><span class="label">Data Ricovero:</span> <br> <span class="value" th:text="${#temporals.format(paziente.data_arrivo, 'dd/MM/yyyy')}">Data</span></div>
+            <div><span class="label">Soddisfazione:</span> <br> <span class="value" th:text="${paziente.soddisfazione} + '/100'">0</span></div>
+        </div>
+
+        <hr class="divider">
+
+        <h3>Esami Clinici</h3>
+
+        <div th:if="${isDoctor}" class="doctor-box">
+            <strong class="doctor-title"> Nuova Prescrizione</strong>
+            <form action="/staff/esame/crea" method="post" class="prescrizione-form">
+                <input type="hidden" name="idPaziente" th:value="${paziente.paziente_id}">
+                
+                <input type="text" name="nomeEsame" class="input-std" placeholder="Nome Esame (es. TAC)" required>
+                
+                <input type="date" name="dataEsame" class="input-std" required>
+
+                <select name="reparto" class="input-std">
+                    <option value="radiology">Radiologia</option>
+                    <option value="cardiology">Cardiologia</option>
+                    <option value="laboratory">Laboratorio</option>
+                    <option th:value="${paziente.reparto}" th:text="'Reparto Attuale (' + ${paziente.reparto} + ')'"></option>
+                </select>
+
+                <button type="submit" class="btn-primary">Prenota</button>
+            </form>
+        </div>
+
+        <p th:if="${esami.empty}" class="empty-message">Nessun esame presente in cartella.</p>
+
+        <table th:unless="${esami.empty}">
+            <thead>
+                <tr>
+                    <th class="col-esame">Esame</th>
+                    <th class="col-data">Data Pianificata</th>
+                    <th>Esito / Referto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="e : ${esami}">
+                    <td class="text-bold" th:text="${e.nome_esame}">Nome</td>
+                    <td th:text="${#temporals.format(e.data_esame, 'dd/MM/yyyy')}">Data</td>
+                    
+                    <td>
+                        <div th:unless="${isDoctor}">
+                            <span th:if="${e.esito != null}" th:text="${e.esito}" class="esito-ok">Esito</span>
+                            <span th:if="${e.esito == null}" class="esito-pending">In attesa di referto</span>
+                        </div>
+
+                        <div th:if="${isDoctor}">
+                            <form action="/staff/esame/update" method="post" class="form-update-esito">
+                                <input type="hidden" name="idEsame" th:value="${e.id_esame}">
+                                <input type="hidden" name="idPaziente" th:value="${paziente.paziente_id}">
+                                
+                                <input type="text" name="esito" th:value="${e.esito}" 
+                                       placeholder="Scrivi esito..." class="input-std input-full">
+                                
+                                <button type="submit" class="btn-success" title="Salva Modifiche"></button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</body>
+</html>

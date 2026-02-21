@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login | Smart Hospital</title>
+    <link rel="stylesheet" href="/css/login_style.css" />
+</head>
+<body>
+
+    <div class="login-container">
+        
+        <h1>Smart Hospital</h1>
+        <h3>Accedi al portale ospedaliero</h3>
+        
+        <div th:if="${error}" class="error-box">
+            <p style="margin: 0;" th:text="${error}"></p>
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required="required" placeholder="Inserisci il tuo ID" />
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required="required" placeholder="Inserisci la password" />
+
+            <button type="submit">Accedi</button>
+
+        </form>
+        
+        <div class="footer-text">
+            Sistema di Gestione Ospedaliera
+        </div>
+    </div>
+
+</body>
+</html>

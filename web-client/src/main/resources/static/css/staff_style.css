@@ -1,0 +1,153 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #eef2f5;
+    padding: 20px;
+    margin: 0;
+}
+
+/* --- Navbar --- */
+.navbar {
+    background-color: #0056b3;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.badge-role {
+    background: rgba(255,255,255,0.2);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    margin-left: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.user-display {
+    margin-right: 15px;
+    font-weight: 500;
+}
+
+.logout-btn {
+    color: #ffcccc;
+    text-decoration: none;
+    border: 1px solid #ffcccc;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background 0.3s, color 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: #ffcccc;
+    color: #0056b3;
+}
+
+/* --- Grid Layout (Main + Sidebar) --- */
+.container {
+    display: flex;
+    gap: 20px;
+}
+
+.main-col {
+    flex: 3;
+}
+
+.side-col {
+    flex: 1;
+}
+
+/* --- Card --- */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.card h2, .card h3 {
+    margin: 0;
+    color: #333;
+}
+
+/* --- Form Elements --- */
+.reparto-select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #f8f9fa;
+    cursor: pointer;
+}
+
+/* --- Tabelle --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background-color: #f8f9fa;
+    color: #666;
+    font-weight: 600;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+.patient-name {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+/* --- Bottoni Azioni --- */
+.btn-view {
+    background-color: #17a2b8;
+    color: white;
+    padding: 6px 12px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9em;
+    transition: background 0.3s;
+}
+
+.btn-view:hover {
+    background-color: #138496;
+}
+
+/* --- Stati Turni --- */
+.status-present {
+    color: green;
+    font-weight: bold;
+}
+
+.status-rest {
+    color: gray;
+    font-style: italic;
+}
+
+/* --- Responsive per schermi piccoli --- */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+}

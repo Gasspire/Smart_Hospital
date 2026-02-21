@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard | Smart Hospital</title>
+    <link rel="stylesheet" href="/css/admin_style.css"/>
+</head>
+<body>
+
+    <div class="navbar">
+        <div>
+            <strong>Pannello Amministrazione</strong> 
+            <span style="opacity:0.7; font-size:0.9em; margin-left:10px;" th:text="${token.username}">Admin</span>
+        </div>
+        <a href="/logout">Esci</a>
+    </div>
+
+    <h3 style="color: #555; margin-left: 5px;">Situazione Reparti in Tempo Reale</h3>
+    
+    <div class="grid-container">
+        <div class="card" th:each="stat : ${liveStats}">
+            <div class="live-box">
+                <div>
+                    <div class="live-label" th:text="${stat.reparto}">REPARTO</div>
+                    <div style="font-size: 0.8em; color: gray;">Soddisfazione Media</div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="live-number" th:text="${stat.pazientiAttuali}">0</div>
+                    <div style="font-weight: bold; color: #2ecc71;" 
+                         th:text="${#numbers.formatDecimal(stat.mediaSoddisfazione, 1, 1)} + '/100'">
+                        95.0/100
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:flex; justify-content: space-between; font-size: 0.8em; margin-bottom: 2px;">
+                <span>Occupazione Letti</span>
+                <span th:text="${stat.pazientiAttuali} + '/' + ${stat.capienzaMassima}">0/20</span>
+            </div>
+            <div class="progress-bg">
+                <div class="progress-fill" 
+                     th:classappend="${stat.percentualeOccupazione > 90} ? 'bar-red' : 'bar-blue'"
+                     th:style="'width: ' + ${stat.percentualeOccupazione} + '%'"></div>
+            </div>
+        </div>
+        
+        <div th:if="${liveStats.empty}" class="card" style="grid-column: span 2; text-align: center; color: gray;">
+            Nessun paziente attualmente ricoverato.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Report Storico Settimanale</h2>
+        
+        <p th:if="${stats.empty}" style="color:red">Nessun dato storico per questa settimana.</p>
+
+        <table th:unless="${stats.empty}">
+            <thead>
+                <tr>
+                    <th>Reparto</th> 
+                    <th>Settimana</th> 
+                    <th>Letti Liberi</th> 
+                    <th>Richieste</th> 
+                    <th>Soddisfazione</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="s : ${stats}">
+                    <td style="color: #2980b9; font-weight: bold;" th:text="${s.reparto}">Reparto</td>
+                    <td th:text="${s.week_num}">1</td>
+                    <td th:text="${s.letti_disponibili}">0</td>
+                    <td th:text="${s.richieste_totali}">0</td>
+                    <td th:text="${s.soddisfazione_pazienti} + '%'">0%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <br />
+
+    <h3 style="color: #555; margin-left: 5px;">Gestione Operativa</h3>
+    
+    <div class="grid-container">
+        
+        <div class="card">
+            <h2 style="color: #d35400;"> Ricovera Paziente</h2>
+            <form action="/admin/paziente/create" method="post">
+                <input type="text" name="id" placeholder="ID Paziente (es. PAT-2026-X)" required="required" />
+                <input type="text" name="nome" placeholder="Nome Completo" required="required" />
+                <div style="display:flex; gap:10px;">
+                    <input type="number" name="eta" placeholder="Età" required="required" style="width: 80px;" />
+                    <select name="reparto">
+                        <option value="general_medicine">Medicina Gen.</option>
+                        <option value="ICU">Terapia Intensiva</option>
+                        <option value="surgery">Chirurgia</option>
+                        <option value="emergency">Pronto Soccorso</option>
+                    </select>
+                </div>
+                <input type="password" name="password" placeholder="Password Accesso" required="required" />
+                <button type="submit" class="btn-green">Crea Cartella Clinica</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2 style="color: #2980b9;"> Assumi Staff / Admin</h2>
+            <form action="/admin/user/create" method="post">
+                <input type="text" name="username" placeholder="Username (es. DOC-X, STF-Y)" required="required" />
+                <input type="text" name="nome" placeholder="Nome Completo" required="required" />
+                <select name="ruolo">
+                    <option value="doctor">Medico</option>
+                    <option value="nurse">Infermiere</option>
+                    <option value="admin">Amministratore</option>
+                </select>
+                <input type="password" name="password" placeholder="Password" required="required" />
+                <button type="submit" class="btn-blue">Crea Utente</button>
+            </form>
+        </div>
+
+    </div>
+
+    <div class="card" style="margin-top: 20px;">
+        <h2> Utenti del Sistema</h2>
+        <div style="max-height: 300px; overflow-y: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th> 
+                        <th>Ruolo</th> 
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="u : ${utenti}">
+                        <td th:text="${u.username}">User</td>
+                        <td>
+                            <span style="background: #eee; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 0.9em;" 
+                                  th:text="${u.ruolo}">ROLE</span>
+                        </td>
+                        <td>
+                            <form th:if="${u.username != token.username}" action="/admin/user/delete" method="post" 
+                                  onsubmit="return confirm('Sei sicuro di voler eliminare questo utente?');">
+                                <input type="hidden" name="username" th:value="${u.username}" />
+                                <button type="submit" class="btn-red">Elimina</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

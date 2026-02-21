@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Area Staff | Smart Hospital</title>
+    <link rel="stylesheet" href="/css/staff_style.css" />
+</head>
+<body>
+
+    <div class="navbar">
+        <div>
+            <strong>Smart Hospital Staff</strong>
+            <span class="badge-role" th:text="${token.ruolo}">NURSE</span>
+        </div>
+        <div>
+            <span class="user-display" th:text="${token.username}">User</span>
+            <a href="/logout" class="logout-btn">Esci</a>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <div class="main-col">
+            <div class="card">
+                
+                <div class="card-header">
+                    <h2>Pazienti in Reparto</h2>
+                    
+                    <form action="/staff/home" method="get">
+                        <select name="reparto" onchange="this.form.submit()" class="reparto-select">
+                            <option value="general_medicine" th:selected="${repartoSelezionato == 'general_medicine'}">Medicina Generale</option>
+                            <option value="ICU" th:selected="${repartoSelezionato == 'ICU'}">Terapia Intensiva (ICU)</option>
+                            <option value="emergency" th:selected="${repartoSelezionato == 'emergency'}">Pronto Soccorso</option>
+                            <option value="surgery" th:selected="${repartoSelezionato == 'surgery'}">Chirurgia</option>
+                        </select>
+                    </form>
+                </div>
+
+                <p th:if="${pazienti.empty}" style="color: gray; font-style: italic;">
+                    Nessun paziente attualmente ricoverato in questo reparto.
+                </p>
+
+                <table th:unless="${pazienti.empty}">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nominativo</th>
+                            <th>Età</th>
+                            <th>Data Ricovero</th>
+                            <th>Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p : ${pazienti}">
+                            <td th:text="${p.paziente_id}">ID</td>
+                            
+                            <td class="patient-name" th:text="${p.nome_completo}">Nome</td>
+                            
+                            <td th:text="${p.eta}">00</td>
+                            
+                            <td th:text="${#temporals.format(p.data_arrivo, 'dd/MM/yyyy')}">Data</td>
+                            
+                            <td>
+                                <a th:href="@{/staff/paziente/{id}(id=${p.paziente_id})}" class="btn-view">Apri Cartella</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="side-col">
+            <div class="card">
+                <h3>I tuoi Turni</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sett.</th>
+                            <th>Stato</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="t : ${turni}">
+                            <td>Week <span th:text="${t.week_num}">1</span></td>
+                            <td>
+                                <span th:if="${t.presente}" class="status-present">Presente</span>
+                                <span th:unless="${t.presente}" class="status-rest">Riposo</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
